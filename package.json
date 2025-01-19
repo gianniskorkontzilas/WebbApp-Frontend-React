@@ -1,5 +1,4 @@
 {
-<<<<<<< HEAD
   "name": "mywebapp",
   "version": "0.1.0",
   "private": true,
@@ -9,11 +8,9 @@
     "@mui/icons-material": "^6.4.0",
     "@mui/material": "^6.4.0",
     "axios": "^1.7.9",
-    "cra-template": "1.2.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "jwt-decode": "^4.0.0",
     "react-router-dom": "^7.1.2",
-    "react-scripts": "5.0.1"
+    "react-scripts": "^5.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -40,20 +37,8 @@
     ]
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
-=======
-  "dependencies": {
-    "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.0",
-    "@mui/icons-material": "^6.3.1",
-    "@mui/material": "^6.3.1",
-    "axios": "^1.7.9",
-    "jwt-decode": "^4.0.0",
-    "react-router-dom": "^7.1.1"
-  },
-  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@types/jwt-decode": "^3.1.0",
     "@types/react-router-dom": "^5.3.3"
->>>>>>> 8de5b0d5d01b522ab0b8e3da533827c8b145d06c
   }
 }
