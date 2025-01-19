@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Box, Typography, Card, CardContent, CardActions, Button, CircularProgress, Snackbar, Alert } from "@mui/material";
 import { storeService } from "../api/storeService";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 
 interface Store {
   id: string;
