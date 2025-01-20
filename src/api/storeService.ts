@@ -48,7 +48,8 @@ export const storeService = {
 
   createStore: async (store: { name: string }) => {
     try {
-      await axiosInstance.post(API_URL, store);
+      const response = await axiosInstance.post(API_URL, store);
+      return response.data;
     } catch (error) {
       throw new Error('Failed to create store');
     }
@@ -56,9 +57,18 @@ export const storeService = {
 
   updateStore: async (storeId: string, store: { name: string }) => {
     try {
-      await axiosInstance.put(`${API_URL}/${storeId}`, store);
+      const response = await axiosInstance.put(`${API_URL}/${storeId}`, store);
+      return response.data;
     } catch (error) {
       throw new Error('Failed to update store');
     }
   },
+
+  deleteStore: async (storeId: string) => {
+    try {
+      await axiosInstance.delete(`${API_URL}/${storeId}`);
+    } catch (error) {
+      throw new Error('Failed to delete store');
+    }
+  }
 };
