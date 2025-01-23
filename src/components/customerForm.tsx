@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { TextField, Button, Box, Typography, Snackbar, Alert } from "@mui/material";
-import axios from "../api/axiosInstance.ts";
+import axiosInstance from "../api/axiosInstance.ts";
 
 const CustomerForm = () => {
     const [firstName, setFirstName] = useState("");
@@ -16,7 +16,7 @@ const CustomerForm = () => {
         if (customerId) {
             const fetchCustomer = async () => {
                 try {
-                    const response = await axios.get(`/stores/${storeId}/customers/${customerId}`);
+                    const response = await axiosInstance.get(`/stores/${storeId}/customers/${customerId}`);
                     setFirstName(response.data.firstName);
                     setLastName(response.data.lastName);
                     setVatNumber(response.data.vatNumber);
@@ -42,10 +42,10 @@ const CustomerForm = () => {
         const customerData = { firstName, lastName, vatNumber, dateOfBirth }; 
         try {
             if (customerId) {
-                await axios.put(`/stores/${storeId}/customers/${customerId}`, customerData);
+                await axiosInstance.put(`/stores/${storeId}/customers/${customerId}`, customerData);
                 showSnackbar("Customer updated successfully.", "success");
             } else {
-                await axios.post(`/stores/${storeId}/customers`, customerData);
+                await axiosInstance.post(`/stores/${storeId}/customers`, customerData);
                 showSnackbar("Customer created successfully.", "success");
             }
             navigate(`/stores/${storeId}/customers`);

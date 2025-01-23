@@ -1,11 +1,61 @@
+// // import React, { useState } from 'react';
+// // import { useAuth } from '../context/authContext.tsx';
+// // import axios from 'axios';
+// // import { useNavigate } from 'react-router-dom';
+
+// // const Login = () => {
+// //   const [login, setLogin] = useState('');
+// //   const [password, setPassword] = useState('');
+// //   const { login: loginContext } = useAuth();
+// //   const navigate = useNavigate();
+
+// //   const handleLogin = async (e: React.FormEvent) => {
+// //     e.preventDefault();
+// //     try {
+// //       const response = await axios.post('http://localhost:8080/api/auth/login', { login, password });
+// //       const token = response.data.token;
+// //       loginContext(token);
+// //       navigate('/stores'); 
+// //     } catch (error) {
+// //       console.error('Login error:', error);
+// //       alert('Invalid login credentials');
+// //     }
+// //   };
+
+// //   return (
+// //     <div>
+// //       <h2>Login</h2>
+// //       <form onSubmit={handleLogin}>
+// //         <input
+// //           type="text"
+// //           value={login}
+// //           onChange={(e) => setLogin(e.target.value)}
+// //           placeholder="Login"
+// //         />
+// //         <input
+// //           type="password"
+// //           value={password}
+// //           onChange={(e) => setPassword(e.target.value)}
+// //           placeholder="Password"
+// //         />
+// //         <button type="submit">Login</button>
+// //       </form>
+// //     </div>
+// //   );
+// // };
+
+// // export default Login;
+
 // import React, { useState } from 'react';
 // import { useAuth } from '../context/authContext.tsx';
-// import axios from 'axios';
+// import { TextField, Button, Snackbar, Alert } from '@mui/material';
 // import { useNavigate } from 'react-router-dom';
+// import axios from 'axios';
 
 // const Login = () => {
 //   const [login, setLogin] = useState('');
 //   const [password, setPassword] = useState('');
+//   const [error, setError] = useState('');
 //   const { login: loginContext } = useAuth();
 //   const navigate = useNavigate();
 
@@ -15,10 +65,10 @@
 //       const response = await axios.post('http://localhost:8080/api/auth/login', { login, password });
 //       const token = response.data.token;
 //       loginContext(token);
-//       navigate('/stores'); 
+//       navigate('/dashboard');
 //     } catch (error) {
 //       console.error('Login error:', error);
-//       alert('Invalid login credentials');
+//       setError('Invalid login credentials');
 //     }
 //   };
 
@@ -26,31 +76,47 @@
 //     <div>
 //       <h2>Login</h2>
 //       <form onSubmit={handleLogin}>
-//         <input
-//           type="text"
+//         <TextField
+//           label="Login"
 //           value={login}
 //           onChange={(e) => setLogin(e.target.value)}
-//           placeholder="Login"
+//           fullWidth
+//           margin="normal"
 //         />
-//         <input
+//         <TextField
+//           label="Password"
 //           type="password"
 //           value={password}
 //           onChange={(e) => setPassword(e.target.value)}
-//           placeholder="Password"
+//           fullWidth
+//           margin="normal"
 //         />
-//         <button type="submit">Login</button>
+//         <Button type="submit" variant="contained" color="primary">
+//           Login
+//         </Button>
 //       </form>
+//       <Snackbar
+//         open={!!error}
+//         autoHideDuration={3000}
+//         onClose={() => setError('')}
+//         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+//       >
+//         <Alert severity="error" onClose={() => setError('')}>
+//           {error}
+//         </Alert>
+//       </Snackbar>
 //     </div>
 //   );
 // };
 
 // export default Login;
 
+
 import React, { useState } from 'react';
 import { useAuth } from '../context/authContext.tsx';
 import { TextField, Button, Snackbar, Alert } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axiosinstance from '../api/axiosInstance.ts';
 
 const Login = () => {
   const [login, setLogin] = useState('');
@@ -62,8 +128,19 @@ const Login = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8080/api/auth/login', { login, password });
+      const response = await axiosinstance.post('http://localhost:8080/api/auth/login', { login, password });
       const token = response.data.token;
+  
+      // Εκτυπώστε το token για να δείτε τι επιστρέφει το API
+      console.log('Received Token:', token);  
+  
+      if (token) {
+        localStorage.setItem('token', token);  // Αποθήκευση του token
+        console.log('Token saved to localStorage:', token);  // Εκτύπωση για να επιβεβαιώσουμε ότι αποθηκεύθηκε
+      } else {
+        console.error('No token received from the API');
+      }
+  
       loginContext(token);
       navigate('/dashboard');
     } catch (error) {
@@ -71,6 +148,7 @@ const Login = () => {
       setError('Invalid login credentials');
     }
   };
+  
 
   return (
     <div>

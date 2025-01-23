@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Snackbar, Alert, CircularProgress } from "@mui/material";
 import { useParams } from "react-router-dom";
-import axios from "../api/axiosInstance.ts";
+import axiosInstance from "../api/axiosInstance.ts";
 
 interface Store {
   id: number;
@@ -18,7 +18,7 @@ const StoreDetails: React.FC = () => {
     const fetchStoreDetails = async () => {
       if (storeId) {
         try {
-          const response = await axios.get<Store>(`/stores/${storeId}`);
+          const response = await axiosInstance.get<Store>(`/stores/${storeId}`);
           setStore(response.data);
         } catch (error) {
           setError("Failed to fetch store details.");
@@ -57,3 +57,4 @@ const StoreDetails: React.FC = () => {
 };
 
 export default StoreDetails;
+

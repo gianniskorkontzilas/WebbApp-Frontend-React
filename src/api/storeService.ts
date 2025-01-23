@@ -24,7 +24,7 @@
 // };
 
 
-import axiosInstance from './axiosInstance'; 
+import axiosInstance from '../api/axiosInstance.ts';
 const API_URL = 'http://localhost:8080/api/stores'; 
 
 export const storeService = {
@@ -48,8 +48,7 @@ export const storeService = {
 
   createStore: async (store: { name: string }) => {
     try {
-      const response = await axiosInstance.post(API_URL, store);
-      return response.data;
+      await axiosInstance.post(API_URL, store);
     } catch (error) {
       throw new Error('Failed to create store');
     }
@@ -57,18 +56,9 @@ export const storeService = {
 
   updateStore: async (storeId: string, store: { name: string }) => {
     try {
-      const response = await axiosInstance.put(`${API_URL}/${storeId}`, store);
-      return response.data;
+      await axiosInstance.put(`${API_URL}/${storeId}`, store);
     } catch (error) {
       throw new Error('Failed to update store');
     }
   },
-
-  deleteStore: async (storeId: string) => {
-    try {
-      await axiosInstance.delete(`${API_URL}/${storeId}`);
-    } catch (error) {
-      throw new Error('Failed to delete store');
-    }
-  }
 };

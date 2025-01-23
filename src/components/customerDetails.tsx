@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Snackbar, Alert } from "@mui/material";
-import axios from "../api/axiosInstance.ts";
+import axiosInstance from "../api/axiosInstance.ts";
 
 interface Customer {
     id: number;
@@ -18,7 +18,7 @@ const CustomerDetails: React.FC = () => {
     useEffect(() => {
         const fetchCustomerDetails = async () => {
             try {
-                const response = await axios.get<Customer>("/customers/1"); 
+                const response = await axiosInstance.get<Customer>("/customers/1"); 
                 setCustomer(response.data);
             } catch (error) {
                 setError("Failed to fetch customer details.");

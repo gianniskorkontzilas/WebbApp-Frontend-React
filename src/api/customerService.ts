@@ -57,7 +57,7 @@
 // };
 
 
-import axios from 'axios';
+import axiosInstance from '../api/axiosInstance.ts';
 
 const API_URL = 'http://localhost:8080/api/customers'; 
 
@@ -66,7 +66,7 @@ export const customerService = {
   
   getCustomers: async (storeId: string) => {
     try {
-      const response = await axios.get(`${API_URL}/store/${storeId}`);
+      const response = await axiosInstance.get(`${API_URL}/store/${storeId}`);
       return response.data;
     } catch (error) {
       throw new Error('Failed to fetch customers');
@@ -75,7 +75,7 @@ export const customerService = {
 
   getCustomerById: async (customerId: string) => {
     try {
-      const response = await axios.get(`${API_URL}/${customerId}`);
+      const response = await axiosInstance.get(`${API_URL}/${customerId}`);
       return response.data;
     } catch (error) {
       throw new Error('Failed to fetch customer');
@@ -84,7 +84,7 @@ export const customerService = {
 
   createCustomer: async (storeId: string, customer: any) => {
     try {
-      await axios.post(`${API_URL}/store/${storeId}`, customer);
+      await axiosInstance.post(`${API_URL}/store/${storeId}`, customer);
     } catch (error) {
       throw new Error('Failed to create customer');
     }
@@ -92,7 +92,7 @@ export const customerService = {
 
   updateCustomer: async (customerId: string, customer: any) => {
     try {
-      await axios.put(`${API_URL}/${customerId}`, customer);
+      await axiosInstance.put(`${API_URL}/${customerId}`, customer);
     } catch (error) {
       throw new Error('Failed to update customer');
     }

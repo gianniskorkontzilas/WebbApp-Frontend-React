@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { TextField, Button, Box, Typography, Snackbar, Alert, CircularProgress } from "@mui/material";
-import axios from "../api/axiosInstance.ts";  
+import axiosInstance from "../api/axiosInstance.ts";
 
 interface StoreData {
   name: string;
@@ -18,7 +18,7 @@ const StoreForm: React.FC = () => {
     if (storeId) {
       const fetchStore = async () => {
         try {
-          const response = await axios.get(`/stores/${storeId}`);
+          const response = await axiosInstance.get(`/stores/${storeId}`);
           setName(response.data.name);
         } catch (error) {
           console.error("Error fetching store:", error);
@@ -40,9 +40,9 @@ const StoreForm: React.FC = () => {
 
     try {
       if (storeId) {
-        await axios.put(`/stores/${storeId}`, storeData);
+        await axiosInstance.put(`/stores/${storeId}`, storeData);
       } else {
-        await axios.post("/stores", storeData);
+        await axiosInstance.post("/stores", storeData);
       }
       navigate("/stores");  
     } catch (err: any) {
@@ -90,3 +90,4 @@ const StoreForm: React.FC = () => {
 };
 
 export default StoreForm;
+
