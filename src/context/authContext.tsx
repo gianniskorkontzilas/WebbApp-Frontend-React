@@ -70,14 +70,14 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [auth, setAuth] = useState<boolean>(false); 
-  const [loading, setLoading] = useState<boolean>(true); // Κατάσταση φόρτωσης
+  const [loading, setLoading] = useState<boolean>(true); 
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
       setAuth(true);
     }
-    setLoading(false); // Όταν ολοκληρωθεί η διαδικασία, βγάζουμε την κατάσταση φόρτωσης
+    setLoading(false); 
   }, []);
 
   const login = (token: string) => {

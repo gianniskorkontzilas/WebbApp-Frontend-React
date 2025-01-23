@@ -110,7 +110,6 @@ axiosInstance.interceptors.request.use(
     const token = localStorage.getItem('token');  
 
     if (token) {
-      // Αν το token υπάρχει, προσθέτουμε το Authorization header
       config.headers['Authorization'] = `Bearer ${token}`;  
       console.log('Token added to request:', token);  
     } else {
@@ -131,7 +130,7 @@ axiosInstance.interceptors.response.use(
   },
   (error: AxiosError): Promise<AxiosError> => {
     if (error.response && error.response.status === 401) {  
-      // Αν υπάρχει 401 Unauthorized, αφαιρούμε το token από το localStorage και ανακατευθύνουμε στο login
+      
       localStorage.removeItem('token');  
       console.warn('Unauthorized - Token removed');
       window.location.href = '/login';  

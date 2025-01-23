@@ -131,12 +131,11 @@ const Login = () => {
       const response = await axiosinstance.post('http://localhost:8080/api/auth/login', { login, password });
       const token = response.data.token;
   
-      // Εκτυπώστε το token για να δείτε τι επιστρέφει το API
       console.log('Received Token:', token);  
   
       if (token) {
-        localStorage.setItem('token', token);  // Αποθήκευση του token
-        console.log('Token saved to localStorage:', token);  // Εκτύπωση για να επιβεβαιώσουμε ότι αποθηκεύθηκε
+        localStorage.setItem('token', token);  
+        console.log('Token saved to localStorage:', token);  
       } else {
         console.error('No token received from the API');
       }
