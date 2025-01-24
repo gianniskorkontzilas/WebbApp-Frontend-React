@@ -57,13 +57,12 @@
 // };
 
 
-import axiosInstance from '../api/axiosInstance.ts';
+import axiosInstance from '../api/axiosInstance';
 
 const API_URL = 'http://localhost:8080/api/customers'; 
 
 export const customerService = {
 
-  
   getCustomers: async (storeId: string) => {
     try {
       const response = await axiosInstance.get(`${API_URL}/store/${storeId}`);
@@ -97,4 +96,13 @@ export const customerService = {
       throw new Error('Failed to update customer');
     }
   },
+
+  deleteCustomer: async (customerId: number) => {
+    try {
+      await axiosInstance.delete(`${API_URL}/${customerId}`);
+    } catch (error) {
+      throw new Error('Failed to delete customer');
+    }
+  },
 };
+

@@ -35,6 +35,20 @@ const CustomerList: React.FC = () => {
     fetchCustomers();
   }, [storeId]);
 
+  const handleDelete = async (id: number) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this customer?");
+    if (!confirmDelete) return;
+
+    try {
+      await customerService.deleteCustomer(id);  
+      setCustomers(customers.filter(customer => customer.id !== id));
+      alert("Customer deleted successfully.");
+    } catch (error) {
+      console.error("Error deleting customer:", error);
+      alert("An error occurred while deleting the customer.");
+    }
+  };
+
   return (
     <div>
       <Typography variant="h4" gutterBottom>
@@ -64,6 +78,13 @@ const CustomerList: React.FC = () => {
                     onClick={() => navigate(`/customers/${customer.id}`)} 
                   >
                     View Details
+                  </Button>
+                  <Button
+                    size="small"
+                    color="secondary"
+                    onClick={() => handleDelete(customer.id)} 
+                  >
+                    Delete
                   </Button>
                 </CardActions>
               </Card>
