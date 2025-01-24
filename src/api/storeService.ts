@@ -61,4 +61,12 @@ export const storeService = {
       throw new Error('Failed to update store');
     }
   },
+
+  deleteStore: async (storeId: string) => {
+    try {
+      await axiosInstance.delete(`${API_URL}/${storeId}`);
+    } catch (error) {
+      throw new Error('Failed to delete store');
+    }
+  }
 };
