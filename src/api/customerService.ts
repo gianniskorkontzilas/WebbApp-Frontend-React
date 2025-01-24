@@ -104,5 +104,23 @@ export const customerService = {
       throw new Error('Failed to delete customer');
     }
   },
+
+  getCustomersByStore: async (storeId: string) => {
+    try {
+      const response = await axiosInstance.get(`${API_URL}/store/${storeId}`);
+      return response.data;
+    } catch (error) {
+      throw new Error('Failed to fetch customers by store');
+    }
+  },
+
+  getCustomerByVatNumber: async (vatNumber: string) => {
+    try {
+      const response = await axiosInstance.get(`${API_URL}/search?vatNumber=${vatNumber}`);
+      return response.data;
+    } catch (error) {
+      throw new Error('Failed to fetch customer by VAT number');
+    }
+  },
 };
 
