@@ -33,7 +33,6 @@ const CustomerDetails: React.FC = () => {
                 <div>
                     <h2>{customer.firstName} {customer.lastName}</h2>
                     <p>ΑΦΜ: {customer.taxId}</p>
-                    <p>Email: {customer.email}</p>
                     <p>Ημερομηνία Γέννησης: {new Date(customer.dateOfBirth).toLocaleDateString()}</p>
                   
                 </div>

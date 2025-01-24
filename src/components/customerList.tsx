@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Box, Typography, Card, CardContent, CardActions, Button, CircularProgress, Snackbar, Alert } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
-import { customerService } from "../api/customerService";
+import { customerService } from "../api/customerService"; 
 
 interface Customer {
   id: number;
@@ -12,40 +12,46 @@ interface Customer {
 }
 
 const CustomerList: React.FC = () => {
-  const { storeId } = useParams<{ storeId: string }>();
-  const [customers, setCustomers] = useState<Customer[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const { storeId } = useParams<{ storeId: string }>(); 
+  const [customers, setCustomers] = useState<Customer[]>([]); 
+  const [loading, setLoading] = useState<boolean>(true); 
+  const [error, setError] = useState<string | null>(null); 
   const navigate = useNavigate(); 
 
   useEffect(() => {
     const fetchCustomers = async () => {
-      if (!storeId) return;
+      setLoading(true); 
       try {
-        const data = await customerService.getCustomers(storeId);
-        setCustomers(data);
+        let data;
+        if (storeId) {
+          data = await customerService.getCustomersByStore(storeId);
+        } else {
+          
+          data = await customerService.getCustomers(storeId || ""); 
+        }
+        setCustomers(data); 
       } catch (error) {
         console.error("Error fetching customers:", error);
-        setError("Error fetching customers");
+        setError("Error fetching customers"); 
       } finally {
-        setLoading(false);
+        setLoading(false); 
       }
     };
 
-    fetchCustomers();
-  }, [storeId]);
+    fetchCustomers(); 
+  }, [storeId]);  
 
   const handleDelete = async (id: number) => {
     const confirmDelete = window.confirm("Are you sure you want to delete this customer?");
-    if (!confirmDelete) return;
+    if (!confirmDelete) return; 
 
     try {
-      await customerService.deleteCustomer(id);  
-      setCustomers(customers.filter(customer => customer.id !== id));
-      alert("Customer deleted successfully.");
+      await customerService.deleteCustomer(id); 
+      setCustomers(customers.filter(customer => customer.id !== id)); 
+      alert("Customer deleted successfully."); 
     } catch (error) {
       console.error("Error deleting customer:", error);
-      alert("An error occurred while deleting the customer.");
+      alert("An error occurred while deleting the customer."); 
     }
   };
 
@@ -56,11 +62,11 @@ const CustomerList: React.FC = () => {
       </Typography>
 
       {loading ? (
-        <CircularProgress />
+        <CircularProgress /> 
       ) : error ? (
         <Snackbar open={!!error} autoHideDuration={6000}>
           <Alert severity="error" onClose={() => setError(null)}>{error}</Alert>
-        </Snackbar>
+        </Snackbar> 
       ) : (
         <Box display="flex" flexWrap="wrap" gap={2}>
           {customers.map((customer) => (
