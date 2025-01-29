@@ -29,7 +29,7 @@ const AppRouter = () => {
           <Route path="/stores/:storeId" element={<StoreDetails />} />
           <Route path="/stores/new" element={<StoreForm />} />
           <Route path="/stores/:storeId/edit" element={<StoreForm />} />
-          <Route path="/stores/:storeId/customers" element={<Customers />} />
+          {/* <Route path="/stores/:storeId/customers" element={<Customers />} />
           <Route
             path="/stores/:storeId/customers/:customerId"
             element={<CustomerDetails />}
@@ -38,7 +38,7 @@ const AppRouter = () => {
           <Route
             path="/stores/:storeId/customers/:customerId/edit"
             element={<CustomerForm />}
-          />
+          /> */}
           <Route path="/customers" element={<Customers />} />
           <Route path="/customers/:customerId" element={<CustomerDetails />} />
           <Route path="/customers/new" element={<CustomerForm />} />

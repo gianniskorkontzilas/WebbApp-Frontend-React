@@ -304,7 +304,6 @@ const Customers: React.FC = () => {
         </div>
       )}
 
-      {/* Snackbar for success */}
       <Snackbar
         open={snackbarOpen && snackbarSeverity === "success"}
         autoHideDuration={6000}
@@ -316,7 +315,6 @@ const Customers: React.FC = () => {
         </Alert>
       </Snackbar>
 
-      {/* Snackbar for error */}
       <Snackbar
         open={snackbarOpen && snackbarSeverity === "error"}
         autoHideDuration={6000}
