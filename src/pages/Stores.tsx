@@ -9,7 +9,7 @@ interface Store {
   name: string;
 }
 
-const StoreList: React.FC = () => {
+const Stores: React.FC = () => {
   const [stores, setStores] = useState<Store[]>([]);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -110,4 +110,4 @@ const StoreList: React.FC = () => {
   );
 };
 
-export default StoreList;
+export default Stores;

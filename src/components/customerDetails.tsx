@@ -6,21 +6,23 @@ interface Customer {
     id: number;
     firstName: string;
     lastName: string;
-    taxId: string;
+    vatNumber: string;
     email: string;
-    dateOfBirth: string; 
+    dateOfBirth: string;
 }
 
 const CustomerDetails: React.FC = () => {
-    const [customer, setCustomer] = useState<Customer | null>(null); 
+    const [customers, setCustomers] = useState<Customer[]>([]); 
     const [error, setError] = useState<string | null>(null); 
 
     useEffect(() => {
         const fetchCustomerDetails = async () => {
             try {
-                const response = await axiosInstance.get<Customer>("/customers/1"); 
-                setCustomer(response.data);
+                const response = await axiosInstance.get<Customer[]>("/customers");
+                console.log(response.data); 
+                setCustomers(response.data); 
             } catch (error) {
+                console.error(error); 
                 setError("Failed to fetch customer details.");
             }
         };
@@ -29,17 +31,22 @@ const CustomerDetails: React.FC = () => {
 
     return (
         <div>
-            {customer ? (
-                <div>
-                    <h2>{customer.firstName} {customer.lastName}</h2>
-                    <p>ΑΦΜ: {customer.taxId}</p>
-                    <p>Ημερομηνία Γέννησης: {new Date(customer.dateOfBirth).toLocaleDateString()}</p>
-                  
-                </div>
+            {customers.length > 0 ? (
+                customers.map((customer) => (
+                    <div key={customer.id}>
+                        <h2>{customer.firstName || "Not Available"} {customer.lastName || "Not Available"}</h2>
+                        <p>ΑΦΜ: {customer.vatNumber || "Not Available"}</p>
+                        <p>Ημερομηνία Γέννησης: {
+                            new Date(customer.dateOfBirth).toLocaleDateString() !== "Invalid Date" 
+                            ? new Date(customer.dateOfBirth).toLocaleDateString() 
+                            : "Invalid Date"
+                        }</p>
+                    </div>
+                ))
             ) : (
                 <div>Loading...</div>
             )}
-            
+
             <Snackbar
                 open={!!error}
                 autoHideDuration={6000}
