@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Snackbar, Alert, CircularProgress } from "@mui/material";
+import { Snackbar, Alert, CircularProgress, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
 import axiosInstance from "../api/axiosInstance.ts";
 
@@ -36,8 +36,8 @@ const StoreDetails: React.FC = () => {
         <CircularProgress />
       ) : store ? (
         <div>
-          <h1>{store.name}</h1>
-          
+          <Typography variant="h4">{store.name}</Typography>
+          <Typography variant="h6">Store ID: {store.id}</Typography> 
         </div>
       ) : (
         <div>No store found.</div>
@@ -57,4 +57,3 @@ const StoreDetails: React.FC = () => {
 };
 
 export default StoreDetails;
-
