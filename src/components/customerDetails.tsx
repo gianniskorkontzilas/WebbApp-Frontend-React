@@ -9,11 +9,11 @@ interface Customer {
   lastName: string;
   vatNumber: string;
   dateOfBirth: string;
-  storeId: number;  
+  storeId: number;
 }
 
 const CustomerDetails: React.FC = () => {
-  const { customerId } = useParams<{ customerId: string }>(); 
+  const { customerId } = useParams<{ customerId: string }>();
   const [customer, setCustomer] = useState<Customer | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -44,7 +44,8 @@ const CustomerDetails: React.FC = () => {
           <Typography variant="h4">{customer.firstName} {customer.lastName}</Typography>
           <Typography variant="h6">VAT: {customer.vatNumber}</Typography>
           <Typography variant="body1">Date of Birth: {new Date(customer.dateOfBirth).toLocaleDateString()}</Typography>
-          <Typography variant="body1">Store ID: {customer.storeId}</Typography> 
+          <Typography variant="body1">Store ID: {customer.storeId}</Typography>
+          <Typography variant="body1"><strong>ID:</strong> {customer.id}</Typography> {/* Εμφάνιση του ID */}
         </div>
       ) : (
         <div>No customer found.</div>
@@ -64,4 +65,3 @@ const CustomerDetails: React.FC = () => {
 };
 
 export default CustomerDetails;
-
