@@ -35,7 +35,7 @@ const CustomerDetails: React.FC = () => {
                 customers.map((customer) => (
                     <div key={customer.id}>
                         <h2>{customer.firstName || "Not Available"} {customer.lastName || "Not Available"}</h2>
-                        <p>ΑΦΜ: {customer.vatNumber || "Not Available"}</p>
+                        <p>vatNumber: {customer.vatNumber || "Not Available"}</p>
                         <p>Ημερομηνία Γέννησης: {
                             new Date(customer.dateOfBirth).toLocaleDateString() !== "Invalid Date" 
                             ? new Date(customer.dateOfBirth).toLocaleDateString() 
