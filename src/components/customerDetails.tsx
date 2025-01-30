@@ -115,7 +115,6 @@ const CustomerList: React.FC = () => {
         Back to Customers
       </Button>
 
-      {/* Snackbar για ειδοποιήσεις */}
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={4000}

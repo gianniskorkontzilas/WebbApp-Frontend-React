@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Button, CircularProgress, Typography, Card, CardContent, CardActions, Box, TextField, Snackbar, Alert } from "@mui/material";
+import { Button, CircularProgress, Typography, Card, CardContent, CardActions, Box, TextField, Snackbar, Alert, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import axiosInstance from "../api/axiosInstance.ts";
 
 interface Customer {
@@ -12,13 +11,15 @@ interface Customer {
 }
 
 const CustomerList: React.FC = () => {
-  const navigate = useNavigate();
   const [vatNumber, setVatNumber] = useState<string>('');
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success");
+
+  const [open, setOpen] = useState(false);
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
 
   const handleSearch = async () => {
     if (!vatNumber) {
@@ -29,16 +30,15 @@ const CustomerList: React.FC = () => {
     setLoading(true);
 
     try {
-      const response = await axiosInstance.get<Customer[]>(`/customers/search?vatNumber=${vatNumber}`);
-      
-      if (response.data.length > 0) {
-        setCustomers(response.data);
-        showSnackbar("Customer(s) found successfully!", "success");
+      const response = await axiosInstance.get<Customer>(`/customers/vat/${vatNumber}`);
+
+      if (response.data) {
+        setCustomers([response.data]); 
+        showSnackbar("Customer found successfully!", "success");
       } else {
         setCustomers([]);
         showSnackbar("No customers found with this VAT number.", "error");
       }
-      
     } catch (error) {
       showSnackbar("Error fetching customer data.", "error");
       setCustomers([]);
@@ -51,6 +51,16 @@ const CustomerList: React.FC = () => {
     setSnackbarMessage(message);
     setSnackbarSeverity(severity);
     setSnackbarOpen(true);
+  };
+
+  const handleOpen = (customer: Customer) => {
+    setSelectedCustomer(customer);
+    setOpen(true); 
+  };
+
+  const handleClose = () => {
+    setOpen(false); 
+    setSelectedCustomer(null); 
   };
 
   return (
@@ -87,7 +97,7 @@ const CustomerList: React.FC = () => {
                 <Typography variant="body2">VAT: {customer.vatNumber}</Typography>
               </CardContent>
               <CardActions>
-                <Button size="small" color="primary" onClick={() => navigate(`/customers/${customer.id}`)}>
+                <Button size="small" color="primary" onClick={() => handleOpen(customer)}>
                   View Details
                 </Button>
               </CardActions>
@@ -98,7 +108,7 @@ const CustomerList: React.FC = () => {
         )}
       </Box>
 
-      <Button variant="contained" color="secondary" onClick={() => navigate("/customers")} sx={{ marginTop: 2 }}>
+      <Button variant="contained" color="secondary" sx={{ marginTop: 2 }}>
         Back to Customers
       </Button>
 
@@ -112,6 +122,26 @@ const CustomerList: React.FC = () => {
           {snackbarMessage}
         </Alert>
       </Snackbar>
+
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Customer Details</DialogTitle>
+        <DialogContent>
+          {selectedCustomer ? (
+            <>
+              <Typography variant="h6">Name: {selectedCustomer.firstName} {selectedCustomer.lastName}</Typography>
+              <Typography variant="body2">VAT Number: {selectedCustomer.vatNumber}</Typography>
+              <Typography variant="body2">Date of Birth: {selectedCustomer.dateOfBirth}</Typography>
+            </>
+          ) : (
+            <CircularProgress />
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };

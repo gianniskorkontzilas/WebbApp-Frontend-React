@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Button, IconButton, Snackbar, Alert, CircularProgress, Box, Typography, Card, CardContent, CardActions } from "@mui/material";
+import { Button, IconButton, Snackbar, Alert, CircularProgress, Box, Typography, Card, CardContent, CardActions, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import { Delete } from "@mui/icons-material";
 import axiosInstance from "../api/axiosInstance.ts";
 
@@ -19,6 +19,8 @@ const Customers: React.FC = () => {
   const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [open, setOpen] = useState(false); 
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null); 
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -56,6 +58,17 @@ const Customers: React.FC = () => {
     setSnackbarOpen(false);
   };
 
+  const handleOpenDetails = (customer: Customer) => {
+    setSelectedCustomer(customer);
+    setOpen(true); 
+  };
+
+  
+  const handleCloseDetails = () => {
+    setOpen(false);
+    setSelectedCustomer(null);
+  };
+
   return (
     <div>
       <Typography variant="h4" gutterBottom>
@@ -81,7 +94,7 @@ const Customers: React.FC = () => {
                   <Button
                     size="small"
                     color="primary"
-                    onClick={() => navigate(`/customers/${customer.id}`)}
+                    onClick={() => handleOpenDetails(customer)} 
                   >
                     View Details
                   </Button>
@@ -123,6 +136,25 @@ const Customers: React.FC = () => {
           {snackbarMessage}
         </Alert>
       </Snackbar>
+      <Dialog open={open} onClose={handleCloseDetails}>
+        <DialogTitle>Customer Details</DialogTitle>
+        <DialogContent>
+          {selectedCustomer ? (
+            <>
+              <Typography variant="h6">Name: {selectedCustomer.firstName} {selectedCustomer.lastName}</Typography>
+              <Typography variant="body2">VAT Number: {selectedCustomer.vatNumber}</Typography>
+              <Typography variant="body2">Date of Birth: {selectedCustomer.dateOfBirth}</Typography>
+            </>
+          ) : (
+            <CircularProgress />
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDetails} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
