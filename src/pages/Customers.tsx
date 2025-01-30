@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Button, IconButton, Snackbar, Alert, CircularProgress, Box, Typography, Card, CardContent, CardActions, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import { Button, IconButton, Snackbar, Alert, CircularProgress, Box, Typography, Card, CardContent, CardActions, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
 import { Delete } from "@mui/icons-material";
 import axiosInstance from "../api/axiosInstance.ts";
 
@@ -21,6 +21,7 @@ const Customers: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [open, setOpen] = useState(false); 
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null); 
+  const [searchId, setSearchId] = useState<string>('');  
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -66,6 +67,24 @@ const Customers: React.FC = () => {
   const handleCloseDetails = () => {
     setOpen(false);
     setSelectedCustomer(null);
+  };
+
+  const handleSearchById = async () => {
+    if (!searchId) {
+      showSnackbar("Please enter a customer ID.", "error");
+      return;
+    }
+
+    try {
+      const response = await axiosInstance.get(`/customers/${searchId}`);
+      if (response.data) {
+        navigate(`/customers/${searchId}`);
+      } else {
+        showSnackbar("Customer not found.", "error");
+      }
+    } catch (error) {
+      showSnackbar("Error during search.", "error");
+    }
   };
 
   return (
@@ -122,24 +141,66 @@ const Customers: React.FC = () => {
         Add Customer
       </Button>
 
-      <Box display="flex" flexDirection="column" gap={2} marginTop={2}>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => navigate("/customers/searchByVat")}
-          sx={{ maxWidth: "200px", width: "auto" }}  
-        >
-          Search by VAT Number
-        </Button>
+      <Box display="flex" justifyContent="space-between" marginTop={2}>
+        <Box display="flex" gap={2}>
+          <TextField
+            label="Search by Customer ID"
+            value={searchId}
+            onChange={(e) => setSearchId(e.target.value)}  
+            variant="outlined"
+            sx={{
+              maxWidth: "200px", 
+              width: "auto",
+              borderRadius: "8px",  
+              '& .MuiOutlinedInput-root': {
+                borderRadius: "8px", 
+              }
+            }}
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleSearchById}  
+            sx={{
+              maxWidth: "200px",
+              width: "auto",
+              borderRadius: "8px", 
+              padding: "10px 20px", 
+            }}
+          >
+            Search by ID
+          </Button>
+        </Box>
 
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={() => navigate("/customers/searchByStoreId")}
-          sx={{ maxWidth: "200px", width: "auto" }}  
-        >
-          Search by Store ID
-        </Button>
+        <Box display="flex" gap={2}>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => navigate("/customers/searchByVat")}
+            sx={{
+              maxWidth: "200px", 
+              width: "auto", 
+              borderRadius: "8px", 
+              padding: "10px 20px", 
+            }}  
+          >
+            Search by VAT Number
+          </Button>
+
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => navigate("/customers/searchByStoreId")}
+            sx={{
+              maxWidth: "200px", 
+              width: "auto", 
+              borderRadius: "8px",
+              padding: "10px 20px", 
+            }}  
+          >
+            Search by Store ID
+          </Button>
+        </Box>
       </Box>
 
       <Snackbar
