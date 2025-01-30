@@ -10,6 +10,7 @@ import CustomerDetails from "./components/customerDetails.tsx";
 import CustomerForm from "./components/customerForm.tsx";
 import Dashboard from './pages/Dashboard.tsx';
 import CustomerByVatNumber from './components/CustomerByVatNumber.tsx';
+import CustomerByStoreId from './components/customerByStoreId.tsx';
 
 const AppRouter = () => {
   const { auth } = useAuth(); 
@@ -30,21 +31,14 @@ const AppRouter = () => {
           <Route path="/stores/:storeId" element={<StoreDetails />} />
           <Route path="/stores/new" element={<StoreForm />} />
           <Route path="/stores/:storeId/edit" element={<StoreForm />} />
-          {/* <Route path="/stores/:storeId/customers" element={<Customers />} />
-          <Route
-            path="/stores/:storeId/customers/:customerId"
-            element={<CustomerDetails />}
-          />
-          <Route path="/stores/:storeId/customers/new" element={<CustomerForm />} />
-          <Route
-            path="/stores/:storeId/customers/:customerId/edit"
-            element={<CustomerForm />}
-          /> */}
+        
           <Route path="/customers" element={<Customers />} />
           <Route path="/customers/:customerId" element={<CustomerDetails />} />
           <Route path="/customers/new" element={<CustomerForm />} />
           <Route path="/customers/:customerId/edit" element={<CustomerForm />} />
           <Route path="/customers/searchByVat" element={<CustomerByVatNumber />} />
+          <Route path="/customers/searchByStoreId" element={<CustomerByStoreId />} />
+
 
         
         </>
