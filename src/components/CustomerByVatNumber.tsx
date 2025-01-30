@@ -128,7 +128,9 @@ const CustomerByVatNumber: React.FC = () => {
         <DialogContent>
           {selectedCustomer ? (
             <>
-              <Typography variant="h6">Name: {selectedCustomer.firstName} {selectedCustomer.lastName}</Typography>
+              <Typography variant="h6">Customer ID: {selectedCustomer.id}</Typography>
+              <Typography variant="h6">First Name: {selectedCustomer.firstName}</Typography>
+              <Typography variant="h6">Last Name: {selectedCustomer.lastName}</Typography>
               <Typography variant="body2">VAT Number: {selectedCustomer.vatNumber}</Typography>
               <Typography variant="body2">Date of Birth: {selectedCustomer.dateOfBirth}</Typography>
             </>
