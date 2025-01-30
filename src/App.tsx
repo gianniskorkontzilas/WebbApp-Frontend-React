@@ -9,6 +9,7 @@ import Customers from "./pages/Customers.tsx";
 import CustomerDetails from "./components/customerDetails.tsx";
 import CustomerForm from "./components/customerForm.tsx";
 import Dashboard from './pages/Dashboard.tsx';
+import CustomerList from './components/customerList.tsx';
 
 const AppRouter = () => {
   const { auth } = useAuth(); 
@@ -43,6 +44,8 @@ const AppRouter = () => {
           <Route path="/customers/:customerId" element={<CustomerDetails />} />
           <Route path="/customers/new" element={<CustomerForm />} />
           <Route path="/customers/:customerId/edit" element={<CustomerForm />} />
+          <Route path="/customers/search" element={<CustomerList />} />
+
         
         </>
       ) : (

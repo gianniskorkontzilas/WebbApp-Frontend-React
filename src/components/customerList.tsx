@@ -1,103 +1,117 @@
-import React, { useEffect, useState } from "react";
-import { Box, Typography, Card, CardContent, CardActions, Button, CircularProgress, Snackbar, Alert } from "@mui/material";
-import { useNavigate, useParams } from "react-router-dom";
-import { customerService } from "../api/customerService"; 
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Button, CircularProgress, Typography, Card, CardContent, CardActions, Box, TextField, Snackbar, Alert } from "@mui/material";
+import axiosInstance from "../api/axiosInstance.ts";
 
 interface Customer {
   id: number;
+  vatNumber: string;
   firstName: string;
   lastName: string;
-  vatNumber: string;
-  dateOfBirth?: string;
+  dateOfBirth: string;
 }
 
 const CustomerList: React.FC = () => {
-  const { storeId } = useParams<{ storeId: string }>(); 
-  const [customers, setCustomers] = useState<Customer[]>([]); 
-  const [loading, setLoading] = useState<boolean>(true); 
-  const [error, setError] = useState<string | null>(null); 
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
+  const [vatNumber, setVatNumber] = useState<string>('');
+  const [customers, setCustomers] = useState<Customer[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success");
 
-  useEffect(() => {
-    const fetchCustomers = async () => {
-      setLoading(true); 
-      try {
-        let data;
-        if (storeId) {
-          data = await customerService.getCustomersByStore(storeId);
-        } else {
-          
-          data = await customerService.getCustomers(storeId || ""); 
-        }
-        setCustomers(data); 
-      } catch (error) {
-        console.error("Error fetching customers:", error);
-        setError("Error fetching customers"); 
-      } finally {
-        setLoading(false); 
-      }
-    };
+  const handleSearch = async () => {
+    if (!vatNumber) {
+      showSnackbar("Please enter a VAT number.", "error");
+      return;
+    }
 
-    fetchCustomers(); 
-  }, [storeId]);  
-
-  const handleDelete = async (id: number) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this customer?");
-    if (!confirmDelete) return; 
+    setLoading(true);
 
     try {
-      await customerService.deleteCustomer(id); 
-      setCustomers(customers.filter(customer => customer.id !== id)); 
-      alert("Customer deleted successfully."); 
+      const response = await axiosInstance.get<Customer[]>(`/customers/search?vatNumber=${vatNumber}`);
+      
+      if (response.data.length > 0) {
+        setCustomers(response.data);
+        showSnackbar("Customer(s) found successfully!", "success");
+      } else {
+        setCustomers([]);
+        showSnackbar("No customers found with this VAT number.", "error");
+      }
+      
     } catch (error) {
-      console.error("Error deleting customer:", error);
-      alert("An error occurred while deleting the customer."); 
+      showSnackbar("Error fetching customer data.", "error");
+      setCustomers([]);
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const showSnackbar = (message: string, severity: "success" | "error") => {
+    setSnackbarMessage(message);
+    setSnackbarSeverity(severity);
+    setSnackbarOpen(true);
   };
 
   return (
     <div>
       <Typography variant="h4" gutterBottom>
-        Customers
+        Search Customers
       </Typography>
 
-      {loading ? (
-        <CircularProgress /> 
-      ) : error ? (
-        <Snackbar open={!!error} autoHideDuration={6000}>
-          <Alert severity="error" onClose={() => setError(null)}>{error}</Alert>
-        </Snackbar> 
-      ) : (
-        <Box display="flex" flexWrap="wrap" gap={2}>
-          {customers.map((customer) => (
-            <Box key={customer.id} width={{ xs: "100%", sm: "48%", md: "32%" }}>
-              <Card>
-                <CardContent>
-                  <Typography variant="h6">{customer.firstName} {customer.lastName}</Typography>
-                  <Typography variant="body2">VAT Number: {customer.vatNumber}</Typography>
-                  <Typography variant="body2">Date of Birth: {customer.dateOfBirth || "Unknown"}</Typography>
-                </CardContent>
-                <CardActions>
-                  <Button
-                    size="small"
-                    color="primary"
-                    onClick={() => navigate(`/customers/${customer.id}`)} 
-                  >
-                    View Details
-                  </Button>
-                  <Button
-                    size="small"
-                    color="secondary"
-                    onClick={() => handleDelete(customer.id)} 
-                  >
-                    Delete
-                  </Button>
-                </CardActions>
-              </Card>
-            </Box>
-          ))}
-        </Box>
-      )}
+      <TextField
+        label="Enter VAT Number"
+        value={vatNumber}
+        onChange={(e) => setVatNumber(e.target.value)}
+        fullWidth
+        margin="normal"
+      />
+      
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={handleSearch}
+        disabled={loading}
+      >
+        Search
+      </Button>
+
+      {loading && <CircularProgress sx={{ marginTop: 2 }} />}
+
+      <Box display="flex" flexWrap="wrap" gap={2} marginTop={2}>
+        {customers.length > 0 ? (
+          customers.map((customer) => (
+            <Card key={customer.id}>
+              <CardContent>
+                <Typography variant="h6">{customer.firstName} {customer.lastName}</Typography>
+                <Typography variant="body2">VAT: {customer.vatNumber}</Typography>
+              </CardContent>
+              <CardActions>
+                <Button size="small" color="primary" onClick={() => navigate(`/customers/${customer.id}`)}>
+                  View Details
+                </Button>
+              </CardActions>
+            </Card>
+          ))
+        ) : (
+          !loading && <Typography>No customers found.</Typography>
+        )}
+      </Box>
+
+      <Button variant="contained" color="secondary" onClick={() => navigate("/customers")} sx={{ marginTop: 2 }}>
+        Back to Customers
+      </Button>
+
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={() => setSnackbarOpen(false)}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert severity={snackbarSeverity} onClose={() => setSnackbarOpen(false)}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
