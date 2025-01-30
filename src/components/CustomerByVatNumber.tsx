@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Button, CircularProgress, Typography, Card, CardContent, CardActions, Box, TextField, Snackbar, Alert, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import { useNavigate } from 'react-router-dom'; 
 import axiosInstance from "../api/axiosInstance.ts";
 
 interface Customer {
@@ -11,6 +12,7 @@ interface Customer {
 }
 
 const CustomerByVatNumber: React.FC = () => {
+  const navigate = useNavigate(); 
   const [vatNumber, setVatNumber] = useState<string>('');
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -108,7 +110,12 @@ const CustomerByVatNumber: React.FC = () => {
         )}
       </Box>
 
-      <Button variant="contained" color="secondary" sx={{ marginTop: 2 }}>
+      <Button
+        variant="contained"
+        color="secondary"
+        sx={{ marginTop: 2 }}
+        onClick={() => navigate('/customers')} 
+      >
         Back to Customers
       </Button>
 

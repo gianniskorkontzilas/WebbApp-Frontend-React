@@ -5,10 +5,11 @@ import axiosInstance from "../api/axiosInstance.ts";
 
 interface Customer {
   id: number;
-  vatNumber: string;
   firstName: string;
   lastName: string;
   dateOfBirth: string;
+  vatNumber: string;
+
 }
 
 const CustomerDetails: React.FC = () => {
@@ -39,10 +40,10 @@ const CustomerDetails: React.FC = () => {
         <CircularProgress />
       ) : customer ? (
         <div>
-          <Typography variant="h4">{customer.firstName} {customer.lastName}</Typography>
+         <Typography variant="h4">{customer.firstName} {customer.lastName}</Typography>
           <Typography variant="h6">Customer ID: {customer.id}</Typography>
           <Typography variant="body1">VAT Number: {customer.vatNumber}</Typography>
-          <Typography variant="body1">Date of Birth: {customer.dateOfBirth}</Typography>
+         <Typography variant="body1">Date of Birth: {customer.dateOfBirth}</Typography>
         </div>
       ) : (
         <div>No customer found.</div>
