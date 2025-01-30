@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Button, IconButton, Snackbar, Alert, CircularProgress, Box, Typography, Card, CardContent, CardActions, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import { Button, Snackbar, Alert, CircularProgress, Box, Typography, Card, CardContent, CardActions, Dialog, DialogActions, DialogContent, DialogTitle, TextField, IconButton } from "@mui/material";
 import { Delete } from "@mui/icons-material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "../api/axiosInstance.ts";
 
 interface Store {
@@ -16,9 +16,12 @@ const Stores: React.FC = () => {
   const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success");
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  
-  const [open, setOpen] = useState(false);  
-  const [selectedStore, setSelectedStore] = useState<Store | null>(null); 
+
+  const [searchId, setSearchId] = useState<string>("");
+  const [open, setOpen] = useState(false);
+  const [selectedStore, setSelectedStore] = useState<Store | null>(null);
+
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     const fetchStores = async () => {
@@ -53,17 +56,23 @@ const Stores: React.FC = () => {
   };
 
   const handleOpen = (store: Store) => {
-    setSelectedStore(store); 
-    setOpen(true); 
+    setSelectedStore(store);
+    setOpen(true);
   };
 
   const handleClose = () => {
-    setOpen(false); 
-    setSelectedStore(null); 
+    setOpen(false);
+    setSelectedStore(null);
   };
 
   const handleCloseSnackbar = () => {
     setSnackbarOpen(false);
+  };
+
+  const handleSearchById = () => {
+    if (searchId) {
+      navigate(`/stores/${searchId}`); 
+    }
   };
 
   return (
@@ -90,7 +99,7 @@ const Stores: React.FC = () => {
                   <Button
                     size="small"
                     color="primary"
-                    onClick={() => handleOpen(store)} 
+                    onClick={() => handleOpen(store)}
                   >
                     View Details
                   </Button>
@@ -101,7 +110,7 @@ const Stores: React.FC = () => {
                     size="small"
                     color="secondary"
                     component={Link}
-                    to={`/stores/${store.id}/edit`}  
+                    to={`/stores/${store.id}/edit`}
                   >
                     Edit
                   </Button>
@@ -114,6 +123,17 @@ const Stores: React.FC = () => {
 
       <Button variant="contained" color="primary" component="a" href="/stores/new" sx={{ marginTop: 2 }}>
         Add Store
+      </Button>
+
+      <TextField
+        label="Search by ID"
+        variant="outlined"
+        value={searchId}
+        onChange={(e) => setSearchId(e.target.value)}
+        sx={{ marginTop: 2, marginBottom: 2, width: '100%' }}
+      />
+      <Button variant="contained" color="primary" onClick={handleSearchById} sx={{ marginBottom: 2 }}>
+        Search by ID
       </Button>
 
       <Snackbar
@@ -133,7 +153,7 @@ const Stores: React.FC = () => {
           {selectedStore ? (
             <>
               <Typography variant="h6">Store Name: {selectedStore.name}</Typography>
-              <Typography variant="body2">Store ID: {selectedStore.id}</Typography> 
+              <Typography variant="body2">Store ID: {selectedStore.id}</Typography>
             </>
           ) : (
             <CircularProgress />
