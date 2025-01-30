@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Button, IconButton, Snackbar, Alert, CircularProgress, Box, Typography, Card, CardContent, CardActions, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Button, TextField, Snackbar, Alert, CircularProgress, Box, Typography, Card, CardContent, CardActions, Dialog, DialogActions, DialogContent, DialogTitle, IconButton } from "@mui/material";
 import { Delete } from "@mui/icons-material";
 import axiosInstance from "../api/axiosInstance.ts";
 
@@ -19,18 +19,19 @@ const Customers: React.FC = () => {
   const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [open, setOpen] = useState(false); 
-  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null); 
-  const [searchId, setSearchId] = useState<string>('');  
+  const [open, setOpen] = useState(false);
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
+  const [searchId, setSearchId] = useState<string>("");
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
-        const response = await axiosInstance.get<Customer[]>('/customers');
+        const response = await axiosInstance.get<Customer[]>("/customers");
         setCustomers(response.data);
       } catch (error) {
-        setError('Error fetching customers.');
+        setError("Error fetching customers.");
       } finally {
         setLoading(false);
       }
@@ -61,7 +62,7 @@ const Customers: React.FC = () => {
 
   const handleOpenDetails = (customer: Customer) => {
     setSelectedCustomer(customer);
-    setOpen(true); 
+    setOpen(true);
   };
 
   const handleCloseDetails = () => {
@@ -69,22 +70,15 @@ const Customers: React.FC = () => {
     setSelectedCustomer(null);
   };
 
-  const handleSearchById = async () => {
+  const handleSearchById = () => {
     if (!searchId) {
       showSnackbar("Please enter a customer ID.", "error");
       return;
     }
 
-    try {
-      const response = await axiosInstance.get(`/customers/${searchId}`);
-      if (response.data) {
-        navigate(`/customers/${searchId}`);
-      } else {
-        showSnackbar("Customer not found.", "error");
-      }
-    } catch (error) {
-      showSnackbar("Error during search.", "error");
-    }
+    const isCustomersPage = location.pathname.includes("customers");
+    const path = isCustomersPage ? "customers" : "stores";
+    navigate(`/${path}/${searchId}`);
   };
 
   return (
@@ -109,11 +103,7 @@ const Customers: React.FC = () => {
                   <Typography variant="body2">VAT: {customer.vatNumber}</Typography>
                 </CardContent>
                 <CardActions>
-                  <Button
-                    size="small"
-                    color="primary"
-                    onClick={() => handleOpenDetails(customer)} 
-                  >
+                  <Button size="small" color="primary" onClick={() => handleOpenDetails(customer)}>
                     View Details
                   </Button>
                   <Link to={`/customers/${customer.id}/edit`}>
@@ -131,13 +121,7 @@ const Customers: React.FC = () => {
         </Box>
       )}
 
-      <Button
-        variant="contained"
-        color="primary"
-        component={Link}
-        to="/customers/new"
-        sx={{ marginTop: 2, marginRight: 2 }}
-      >
+      <Button variant="contained" color="primary" component={Link} to="/customers/new" sx={{ marginTop: 2, marginRight: 2 }}>
         Add Customer
       </Button>
 
@@ -146,69 +130,32 @@ const Customers: React.FC = () => {
           <TextField
             label="Search by Customer ID"
             value={searchId}
-            onChange={(e) => setSearchId(e.target.value)}  
+            onChange={(e) => setSearchId(e.target.value)}
             variant="outlined"
-            sx={{
-              maxWidth: "200px", 
-              width: "auto",
-              borderRadius: "8px",  
-              '& .MuiOutlinedInput-root': {
-                borderRadius: "8px", 
-              }
-            }}
+            sx={{ maxWidth: "200px", width: "auto", borderRadius: "8px", '& .MuiOutlinedInput-root': { borderRadius: "8px" } }}
           />
           <Button
             variant="contained"
             color="primary"
-            onClick={handleSearchById}  
-            sx={{
-              maxWidth: "200px",
-              width: "auto",
-              borderRadius: "8px", 
-              padding: "10px 20px", 
-            }}
+            onClick={handleSearchById}
+            sx={{ maxWidth: "200px", width: "auto", borderRadius: "8px", padding: "10px 20px" }}
           >
             Search by ID
           </Button>
         </Box>
 
         <Box display="flex" gap={2}>
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={() => navigate("/customers/searchByVat")}
-            sx={{
-              maxWidth: "200px", 
-              width: "auto", 
-              borderRadius: "8px", 
-              padding: "10px 20px", 
-            }}  
-          >
+          <Button variant="contained" color="secondary" onClick={() => navigate("/customers/searchByVat")} sx={{ maxWidth: "200px", width: "auto", borderRadius: "8px", padding: "10px 20px" }}>
             Search by VAT Number
           </Button>
 
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => navigate("/customers/searchByStoreId")}
-            sx={{
-              maxWidth: "200px", 
-              width: "auto", 
-              borderRadius: "8px",
-              padding: "10px 20px", 
-            }}  
-          >
+          <Button variant="contained" color="primary" onClick={() => navigate("/customers/searchByStoreId")} sx={{ maxWidth: "200px", width: "auto", borderRadius: "8px", padding: "10px 20px" }}>
             Search by Store ID
           </Button>
         </Box>
       </Box>
 
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={6000}
-        onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
+      <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleCloseSnackbar} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
         <Alert severity={snackbarSeverity} onClose={handleCloseSnackbar}>
           {snackbarMessage}
         </Alert>
@@ -240,4 +187,3 @@ const Customers: React.FC = () => {
 };
 
 export default Customers;
-
