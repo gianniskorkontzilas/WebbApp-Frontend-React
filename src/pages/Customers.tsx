@@ -97,6 +97,11 @@ const Customers: React.FC = () => {
                   >
                     View Details
                   </Button>
+                  <Link to={`/customers/${customer.id}/edit`}>
+                    <Button size="small" color="secondary">
+                      Edit
+                    </Button>
+                  </Link>
                   <IconButton onClick={() => handleDelete(customer.id)} color="secondary">
                     <Delete />
                   </IconButton>
