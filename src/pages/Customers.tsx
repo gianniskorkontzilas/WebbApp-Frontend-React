@@ -117,13 +117,25 @@ const Customers: React.FC = () => {
         Add Customer
       </Button>
 
-      <Button
-        variant="contained"
-        color="secondary"
-        onClick={() => navigate("/customers/search")}
-      >
-        Search
-      </Button>
+      <Box display="flex" flexDirection="column" gap={2} marginTop={2}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => navigate("/customers/searchByVat")}
+          sx={{ maxWidth: "200px", width: "auto" }}  
+        >
+          Search by VAT Number
+        </Button>
+
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => navigate("/customers/searchByStoreId")}
+          sx={{ maxWidth: "200px", width: "auto" }}  
+        >
+          Search by Store ID
+        </Button>
+      </Box>
 
       <Snackbar
         open={snackbarOpen}

@@ -44,7 +44,7 @@ const AppRouter = () => {
           <Route path="/customers/:customerId" element={<CustomerDetails />} />
           <Route path="/customers/new" element={<CustomerForm />} />
           <Route path="/customers/:customerId/edit" element={<CustomerForm />} />
-          <Route path="/customers/search" element={<CustomerByVatNumber />} />
+          <Route path="/customers/searchByVat" element={<CustomerByVatNumber />} />
 
         
         </>
