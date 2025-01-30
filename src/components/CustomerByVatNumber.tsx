@@ -10,7 +10,7 @@ interface Customer {
   dateOfBirth: string;
 }
 
-const CustomerList: React.FC = () => {
+const CustomerByVatNumber: React.FC = () => {
   const [vatNumber, setVatNumber] = useState<string>('');
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -104,7 +104,7 @@ const CustomerList: React.FC = () => {
             </Card>
           ))
         ) : (
-          !loading && <Typography>No customers found.</Typography>
+          <></>
         )}
       </Box>
 
@@ -146,4 +146,4 @@ const CustomerList: React.FC = () => {
   );
 };
 
-export default CustomerList;
+export default CustomerByVatNumber;

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import {  Button, IconButton, Snackbar, Alert, CircularProgress, Box, Typography, Card, CardContent, CardActions } from "@mui/material";
+import { Button, IconButton, Snackbar, Alert, CircularProgress, Box, Typography, Card, CardContent, CardActions, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import { Delete } from "@mui/icons-material";
 import axiosInstance from "../api/axiosInstance.ts";
 
@@ -16,7 +15,9 @@ const Stores: React.FC = () => {
   const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success");
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
+  
+  const [open, setOpen] = useState(false);  
+  const [selectedStore, setSelectedStore] = useState<Store | null>(null); 
 
   useEffect(() => {
     const fetchStores = async () => {
@@ -50,6 +51,16 @@ const Stores: React.FC = () => {
     setSnackbarOpen(true);
   };
 
+  const handleOpen = (store: Store) => {
+    setSelectedStore(store); 
+    setOpen(true); 
+  };
+
+  const handleClose = () => {
+    setOpen(false); 
+    setSelectedStore(null); 
+  };
+
   const handleCloseSnackbar = () => {
     setSnackbarOpen(false);
   };
@@ -78,7 +89,7 @@ const Stores: React.FC = () => {
                   <Button
                     size="small"
                     color="primary"
-                    onClick={() => navigate(`/stores/${store.id}`)}
+                    onClick={() => handleOpen(store)} 
                   >
                     View Details
                   </Button>
@@ -92,7 +103,7 @@ const Stores: React.FC = () => {
         </Box>
       )}
 
-      <Button variant="contained" color="primary" component={Link} to="/stores/new" sx={{ marginTop: 2 }}>
+      <Button variant="contained" color="primary" component="a" href="/stores/new" sx={{ marginTop: 2 }}>
         Add Store
       </Button>
 
@@ -106,6 +117,25 @@ const Stores: React.FC = () => {
           {snackbarMessage}
         </Alert>
       </Snackbar>
+
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Store Details</DialogTitle>
+        <DialogContent>
+          {selectedStore ? (
+            <>
+              <Typography variant="h6">Store Name: {selectedStore.name}</Typography>
+              <Typography variant="body2">Store ID: {selectedStore.id}</Typography> 
+            </>
+          ) : (
+            <CircularProgress />
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
