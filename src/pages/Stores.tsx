@@ -1,7 +1,8 @@
+
 import React, { useState, useEffect } from "react";
 import { Button, Snackbar, Alert, CircularProgress, Box, Typography, Card, CardContent, CardActions, Dialog, DialogActions, DialogContent, DialogTitle, TextField, IconButton } from "@mui/material";
 import { Delete } from "@mui/icons-material";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import axiosInstance from "../api/axiosInstance.ts";
 
 interface Store {
@@ -21,7 +22,8 @@ const Stores: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [selectedStore, setSelectedStore] = useState<Store | null>(null);
 
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
+  const location = useLocation();  // Added useLocation hook
 
   useEffect(() => {
     const fetchStores = async () => {
@@ -70,9 +72,14 @@ const Stores: React.FC = () => {
   };
 
   const handleSearchById = () => {
-    if (searchId) {
-      navigate(`/stores/${searchId}`); 
+    if (!searchId) {
+      showSnackbar("Please enter a store ID.", "error");
+      return;
     }
+
+    const isCustomersPage = location.pathname.includes("stores");
+    const path = isCustomersPage ? "stores" : "customers";
+    navigate(`/${path}/${searchId}`);
   };
 
   return (
@@ -84,8 +91,8 @@ const Stores: React.FC = () => {
       {loading ? (
         <CircularProgress />
       ) : error ? (
-        <Snackbar open={!!error} autoHideDuration={6000}>
-          <Alert severity="error" onClose={() => setError(null)}>{error}</Alert>
+        <Snackbar open={snackbarOpen} autoHideDuration={6000}>
+          <Alert severity="error" onClose={() => setSnackbarOpen(false)}>{error}</Alert>
         </Snackbar>
       ) : (
         <Box display="flex" flexWrap="wrap" gap={2}>
