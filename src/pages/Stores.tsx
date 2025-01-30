@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button, IconButton, Snackbar, Alert, CircularProgress, Box, Typography, Card, CardContent, CardActions, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import { Delete } from "@mui/icons-material";
+import { Link } from "react-router-dom";
 import axiosInstance from "../api/axiosInstance.ts";
 
 interface Store {
@@ -96,6 +97,14 @@ const Stores: React.FC = () => {
                   <IconButton onClick={() => handleDelete(store.id)} color="secondary">
                     <Delete />
                   </IconButton>
+                  <Button
+                    size="small"
+                    color="secondary"
+                    component={Link}
+                    to={`/stores/${store.id}/edit`}  
+                  >
+                    Edit
+                  </Button>
                 </CardActions>
               </Card>
             </Box>

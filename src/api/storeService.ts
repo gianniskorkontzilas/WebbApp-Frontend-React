@@ -1,29 +1,3 @@
-// import axios from 'axios';
-
-// interface Store {
-//   id: string;
-//   name: string;
-  
-// }
-
-// export const storeService = {
-//   getStores: async (): Promise<Store[]> => {
-//     const response = await axios.get('/stores');
-//     return response.data;
-//   },
-
-//   createStore: async (storeData: { name: string; }): Promise<Store> => {
-//     const response = await axios.post('/stores', storeData);
-//     return response.data;
-//   },
-
-//   getStoreDetails: async (storeId: string): Promise<Store> => {
-//     const response = await axios.get(`/stores/${storeId}`);
-//     return response.data;
-//   },
-// };
-
-
 import axiosInstance from '../api/axiosInstance.ts';
 const API_URL = 'http://localhost:8080/api/stores'; 
 
