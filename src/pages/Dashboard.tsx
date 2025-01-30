@@ -1,32 +1,41 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Button } from '@mui/material';
+import { Button, Box, Typography, Container } from '@mui/material';
 
 const Dashboard = () => {
   return (
-    <div>
-      <h2>Welcome to the Dashboard</h2>
+    <Container maxWidth="sm">
+      <Box sx={{ textAlign: 'center', mt: 4 }}>
+        <Typography variant="h4" gutterBottom color="primary">
+          Welcome to the Dashboard
+        </Typography>
+      </Box>
 
-      <div>
-        <h3>Stores</h3>
-        <Link to="/stores">
-          <Button variant="contained" color="primary">
-            Manage Stores
-          </Button>
-        </Link>
-      </div>
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, mt: 4 }}>
+        <Box sx={{ textAlign: 'center' }}>
+          <Typography variant="h5" gutterBottom>
+            Stores
+          </Typography>
+          <Link to="/stores" style={{ textDecoration: 'none' }}>
+            <Button variant="contained" color="primary">
+              Manage Stores
+            </Button>
+          </Link>
+        </Box>
 
-      <div>
-        <h3>Customers</h3>
-        <Link to="/customers">
-          <Button variant="contained" color="secondary">
-            Manage Customers
-          </Button>
-        </Link>
-      </div>
-    </div>
+        <Box sx={{ textAlign: 'center' }}>
+          <Typography variant="h5" gutterBottom>
+            Customers
+          </Typography>
+          <Link to="/customers" style={{ textDecoration: 'none' }}>
+            <Button variant="contained" color="secondary">
+              Manage Customers
+            </Button>
+          </Link>
+        </Box>
+      </Box>
+    </Container>
   );
 };
 
 export default Dashboard;
-
