@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Snackbar, Alert, CircularProgress, Typography } from "@mui/material";
+import { Snackbar, Alert, CircularProgress, Typography, Box, Container } from "@mui/material";
 import { useParams } from "react-router-dom";
 import axiosInstance from "../api/axiosInstance.ts";
 
@@ -31,28 +31,39 @@ const StoreDetails: React.FC = () => {
   }, [storeId]);
 
   return (
-    <div>
+    <Container maxWidth="sm" sx={{ mt: 4, width: "100%", paddingX: 2 }}>
       {isLoading ? (
-        <CircularProgress />
+        <Box sx={{ mt: 4, display: "flex", justifyContent: "center" }}>
+          <CircularProgress />
+        </Box>
       ) : store ? (
-        <div>
-          <Typography variant="h4">{store.name}</Typography>
-          <Typography variant="h6">Store ID: {store.id}</Typography> 
-        </div>
+        <Box sx={{ boxShadow: 2, borderRadius: 2, p: 3 }}>
+          <Typography variant="h4" sx={{ mb: 2, fontWeight: "bold" }}>
+            {store.name}
+          </Typography>
+          <Typography variant="h6" sx={{ mb: 1 }}>
+            Store ID: {store.id}
+          </Typography>
+        </Box>
       ) : (
-        <div>No store found.</div>
+        <Box>
+          <Typography variant="body1" color="textSecondary">
+            No store found.
+          </Typography>
+        </Box>
       )}
 
       <Snackbar
         open={!!error}
         autoHideDuration={6000}
         onClose={() => setError(null)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
-        <Alert onClose={() => setError(null)} severity="error">
+        <Alert onClose={() => setError(null)} severity="error" sx={{ width: "100%" }}>
           {error}
         </Alert>
       </Snackbar>
-    </div>
+    </Container>
   );
 };
 

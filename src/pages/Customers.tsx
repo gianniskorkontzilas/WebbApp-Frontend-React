@@ -83,12 +83,14 @@ const Customers: React.FC = () => {
 
   return (
     <div>
-      <Typography variant="h4" gutterBottom>
+      <Typography variant="h4" gutterBottom color="primary">
         Customers
       </Typography>
 
       {loading ? (
-        <CircularProgress />
+        <Box sx={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
+          <CircularProgress />
+        </Box>
       ) : error ? (
         <Snackbar open={!!error} autoHideDuration={6000}>
           <Alert severity="error" onClose={() => setError(null)}>{error}</Alert>
@@ -96,7 +98,7 @@ const Customers: React.FC = () => {
       ) : (
         <Box display="flex" flexWrap="wrap" gap={2}>
           {customers.map((customer) => (
-            <Box key={customer.id} width={{ xs: "100%", sm: "48%", md: "32%" }}>
+            <Box key={customer.id} width={{ xs: "100%", sm: "48%", md: "32%" }} sx={{ ':hover': { boxShadow: 6 } }}>
               <Card>
                 <CardContent>
                   <Typography variant="h6">{customer.firstName} {customer.lastName}</Typography>
@@ -106,7 +108,7 @@ const Customers: React.FC = () => {
                   <Button size="small" color="primary" onClick={() => handleOpenDetails(customer)}>
                     View Details
                   </Button>
-                  <Link to={`/customers/${customer.id}/edit`}>
+                  <Link to={`/customers/${customer.id}/edit`} style={{ textDecoration: 'none' }}>
                     <Button size="small" color="secondary">
                       Edit
                     </Button>
@@ -132,7 +134,7 @@ const Customers: React.FC = () => {
             value={searchId}
             onChange={(e) => setSearchId(e.target.value)}
             variant="outlined"
-            sx={{ maxWidth: "200px", width: "auto", borderRadius: "8px", '& .MuiOutlinedInput-root': { borderRadius: "8px" } }}
+            sx={{ maxWidth: "200px", width: "auto", borderRadius: "8px" }}
           />
           <Button
             variant="contained"

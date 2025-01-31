@@ -11,7 +11,7 @@ const StoreForm: React.FC = () => {
   const [name, setName] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { storeId } = useParams<{ storeId?: string }>();  
+  const { storeId } = useParams<{ storeId?: string }>();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -44,7 +44,7 @@ const StoreForm: React.FC = () => {
       } else {
         await axiosInstance.post("/stores", storeData);
       }
-      navigate("/stores");  
+      navigate("/stores");
     } catch (err: any) {
       if (err.response?.status === 400) {
         setError("Το όνομα του store πρέπει να είναι μοναδικό.");
@@ -57,8 +57,10 @@ const StoreForm: React.FC = () => {
   };
 
   return (
-    <Box display="flex" flexDirection="column" alignItems="center" mt={5}>
-      <Typography variant="h4">{storeId ? "Edit Store" : "Add Store"}</Typography>
+    <Box display="flex" flexDirection="column" alignItems="center" mt={5} sx={{ width: "100%", maxWidth: 600 }}>
+      <Typography variant="h5" align="center" sx={{ mb: 3 }}>
+        {storeId ? "Edit Store" : "Add Store"}
+      </Typography>
       
       <TextField
         label="Store Name"
@@ -66,6 +68,7 @@ const StoreForm: React.FC = () => {
         onChange={(e) => setName(e.target.value)}
         margin="normal"
         fullWidth
+        sx={{ mb: 2 }}
       />
       
       {error && (
@@ -80,8 +83,8 @@ const StoreForm: React.FC = () => {
         variant="contained"
         color="primary"
         onClick={handleSubmit}
-        sx={{ marginTop: 2 }}
-        disabled={isLoading}  
+        sx={{ marginTop: 2, minWidth: 200 }}
+        disabled={isLoading}
       >
         {isLoading ? <CircularProgress size={24} /> : storeId ? "Save Changes" : "Add Store"}
       </Button>
@@ -90,4 +93,3 @@ const StoreForm: React.FC = () => {
 };
 
 export default StoreForm;
-

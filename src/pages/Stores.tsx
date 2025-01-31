@@ -23,8 +23,7 @@ const Stores: React.FC = () => {
   const [selectedStore, setSelectedStore] = useState<Store | null>(null);
 
   const navigate = useNavigate();
-  const location = useLocation();  // Added useLocation hook
-
+  const location = useLocation();  
   useEffect(() => {
     const fetchStores = async () => {
       try {

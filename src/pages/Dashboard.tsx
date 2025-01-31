@@ -17,7 +17,14 @@ const Dashboard = () => {
             Stores
           </Typography>
           <Link to="/stores" style={{ textDecoration: 'none' }}>
-            <Button variant="contained" color="primary">
+            <Button 
+              variant="contained" 
+              color="primary" 
+              sx={{ 
+                ':hover': { backgroundColor: 'primary.dark' }, 
+                padding: '10px 20px' 
+              }}
+            >
               Manage Stores
             </Button>
           </Link>
@@ -28,7 +35,14 @@ const Dashboard = () => {
             Customers
           </Typography>
           <Link to="/customers" style={{ textDecoration: 'none' }}>
-            <Button variant="contained" color="secondary">
+            <Button 
+              variant="contained" 
+              color="secondary" 
+              sx={{ 
+                ':hover': { backgroundColor: 'secondary.dark' }, 
+                padding: '10px 20px' 
+              }}
+            >
               Manage Customers
             </Button>
           </Link>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { TextField, Button, Box, Typography, Snackbar, Alert } from "@mui/material";
+import { TextField, Button, Box, Typography, Snackbar, Alert, CircularProgress } from "@mui/material";
 import axiosInstance from "../api/axiosInstance.ts";
 
 const CustomerForm = () => {
@@ -10,12 +10,12 @@ const CustomerForm = () => {
     const [dateOfBirth, setDateOfBirth] = useState("");
     const [storeId, setStoreId] = useState<number | null>(null); 
     const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
+    const [isLoading, setIsLoading] = useState(false); 
 
     const { storeId: storeIdParam, customerId } = useParams();
     const navigate = useNavigate();
 
     useEffect(() => {
-        
         if (storeIdParam) {
             setStoreId(Number(storeIdParam));
         }
@@ -53,8 +53,7 @@ const CustomerForm = () => {
         }
 
         const customerData = { firstName, lastName, vatNumber, dateOfBirth, storeId };
-
-        console.log("Sending data:", customerData); 
+        setIsLoading(true); 
 
         try {
             if (customerId) {
@@ -68,12 +67,16 @@ const CustomerForm = () => {
         } catch (error) {
             console.error("Error saving customer:", error);
             showSnackbar("Failed to save customer.", "error");
+        } finally {
+            setIsLoading(false); 
         }
     };
 
     return (
-        <Box display="flex" flexDirection="column" alignItems="center" mt={5}>
-            <Typography variant="h4">{customerId ? "Edit Customer" : "Add Customer"}</Typography>
+        <Box display="flex" flexDirection="column" alignItems="center" mt={5} sx={{ width: '100%', maxWidth: 500 }}>
+            <Typography variant="h4" sx={{ mb: 3 }}>
+                {customerId ? "Edit Customer" : "Add Customer"}
+            </Typography>
             <TextField
                 label="First Name"
                 value={firstName}
@@ -101,9 +104,7 @@ const CustomerForm = () => {
                 value={dateOfBirth}
                 onChange={(e) => setDateOfBirth(e.target.value)}
                 margin="normal"
-                InputLabelProps={{
-                    shrink: true,
-                }}
+                InputLabelProps={{ shrink: true }}
                 fullWidth
             />
             <TextField
@@ -114,15 +115,21 @@ const CustomerForm = () => {
                 margin="normal"
                 fullWidth
             />
-            <Button variant="contained" color="primary" onClick={handleSubmit} sx={{ mt: 2 }}>
-                {customerId ? "Save Changes" : "Add Customer"}
+            <Button
+                variant="contained"
+                color="primary"
+                onClick={handleSubmit}
+                sx={{ mt: 2 }}
+                disabled={isLoading}  
+            >
+                {isLoading ? <CircularProgress size={24} /> : customerId ? "Save Changes" : "Add Customer"}
             </Button>
 
             <Snackbar
                 open={snackbar.open}
                 autoHideDuration={3000}
                 onClose={handleCloseSnackbar}
-                anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                anchorOrigin={{ vertical: "bottom", horizontal: "center" }} 
             >
                 <Alert onClose={handleCloseSnackbar} severity={snackbar.severity as "success" | "error"} sx={{ width: "100%" }}>
                     {snackbar.message}

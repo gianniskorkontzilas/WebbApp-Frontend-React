@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Snackbar, Alert, CircularProgress, Typography } from "@mui/material";
+import { Snackbar, Alert, CircularProgress, Typography, Box, Container } from "@mui/material";
 import { useParams } from "react-router-dom";
 import axiosInstance from "../api/axiosInstance.ts";
 
@@ -9,7 +9,6 @@ interface Customer {
   lastName: string;
   dateOfBirth: string;
   vatNumber: string;
-
 }
 
 const CustomerDetails: React.FC = () => {
@@ -35,30 +34,45 @@ const CustomerDetails: React.FC = () => {
   }, [customerId]);
 
   return (
-    <div>
+    <Container maxWidth="sm" sx={{ mt: 4, width: "100%", paddingX: 2 }}>
       {isLoading ? (
-        <CircularProgress />
+        <Box sx={{ mt: 4, display: "flex", justifyContent: "center" }}>
+          <CircularProgress />
+        </Box>
       ) : customer ? (
-        <div>
-         <Typography variant="h4">{customer.firstName} {customer.lastName}</Typography>
-          <Typography variant="h6">Customer ID: {customer.id}</Typography>
-          <Typography variant="body1">VAT Number: {customer.vatNumber}</Typography>
-         <Typography variant="body1">Date of Birth: {customer.dateOfBirth}</Typography>
-        </div>
+        <Box sx={{ boxShadow: 2, borderRadius: 2, p: 3 }}>
+          <Typography variant="h4" sx={{ mb: 2, fontWeight: "bold" }}>
+            {customer.firstName} {customer.lastName}
+          </Typography>
+          <Typography variant="h6" sx={{ mb: 1 }}>
+            Customer ID: {customer.id}
+          </Typography>
+          <Typography variant="body1" sx={{ mb: 1 }}>
+            VAT Number: {customer.vatNumber}
+          </Typography>
+          <Typography variant="body1" sx={{ mb: 2 }}>
+            Date of Birth: {customer.dateOfBirth}
+          </Typography>
+        </Box>
       ) : (
-        <div>No customer found.</div>
+        <Box>
+          <Typography variant="body1" color="textSecondary">
+            No customer found.
+          </Typography>
+        </Box>
       )}
 
       <Snackbar
         open={!!error}
         autoHideDuration={6000}
         onClose={() => setError(null)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
-        <Alert onClose={() => setError(null)} severity="error">
+        <Alert onClose={() => setError(null)} severity="error" sx={{ width: "100%" }}>
           {error}
         </Alert>
       </Snackbar>
-    </div>
+    </Container>
   );
 };
 
