@@ -1,6 +1,7 @@
 // import React, { useState, useEffect } from "react";
-// import { Snackbar, Alert, CircularProgress, Typography, Box, Container } from "@mui/material";
+// import { CircularProgress, Typography, Box, Container } from "@mui/material";
 // import { useParams } from "react-router-dom";
+// import { useError } from "../context/ErrorContext.tsx";  
 // import axiosInstance from "../api/axiosInstance.ts";
 
 // interface Store {
@@ -11,8 +12,9 @@
 // const StoreDetails: React.FC = () => {
 //   const { storeId } = useParams<{ storeId: string }>(); 
 //   const [store, setStore] = useState<Store | null>(null);
-//   const [error, setError] = useState<string | null>(null);
 //   const [isLoading, setIsLoading] = useState<boolean>(true);
+
+//   const { showError } = useError();  
 
 //   useEffect(() => {
 //     const fetchStoreDetails = async () => {
@@ -21,14 +23,14 @@
 //           const response = await axiosInstance.get<Store>(`/stores/${storeId}`);
 //           setStore(response.data);
 //         } catch (error) {
-//           setError("Failed to fetch store details.");
+//           showError("Error loading store data.", "error");  
 //         } finally {
 //           setIsLoading(false);
 //         }
 //       }
 //     };
 //     fetchStoreDetails();
-//   }, [storeId]);
+//   }, [storeId, showError]);
 
 //   return (
 //     <Container maxWidth="sm" sx={{ mt: 4, width: "100%", paddingX: 2 }}>
@@ -52,26 +54,16 @@
 //           </Typography>
 //         </Box>
 //       )}
-
-//       <Snackbar
-//         open={!!error}
-//         autoHideDuration={6000}
-//         onClose={() => setError(null)}
-//         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-//       >
-//         <Alert onClose={() => setError(null)} severity="error" sx={{ width: "100%" }}>
-//           {error}
-//         </Alert>
-//       </Snackbar>
 //     </Container>
 //   );
 // };
 
 // export default StoreDetails;
 
+
 import React, { useState, useEffect } from "react";
-import { CircularProgress, Typography, Box, Container } from "@mui/material";
-import { useParams } from "react-router-dom";
+import { CircularProgress, Typography, Box, Container, Button } from "@mui/material";
+import { useParams, useNavigate } from "react-router-dom"; 
 import { useError } from "../context/ErrorContext.tsx";  
 import axiosInstance from "../api/axiosInstance.ts";
 
@@ -86,6 +78,7 @@ const StoreDetails: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const { showError } = useError();  
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     const fetchStoreDetails = async () => {
@@ -125,6 +118,17 @@ const StoreDetails: React.FC = () => {
           </Typography>
         </Box>
       )}
+
+    
+      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => navigate('/stores')} 
+        >
+          Back to Stores
+        </Button>
+      </Box>
     </Container>
   );
 };
