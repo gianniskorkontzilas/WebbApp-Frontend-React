@@ -1,70 +1,71 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+---
 
-## Available Scripts
+### **Frontend (`README.md`)**
+```markdown
+# Store Management System - Frontend
 
-In the project directory, you can run:
+## Overview
+This repository contains the **frontend** for the Store Management System, which provides a user-friendly interface for managing **stores** and **customers**. The frontend is built using **React.js** with **Material UI** for a modern and responsive design.
 
-### `npm start`
+## Features
+- **User authentication** via JWT tokens
+- **CRUD operations** for Stores and Customers
+- **React Router** for dynamic page navigation
+- **Material UI** components for an elegant UI
+- **Error handling** with Snackbars for improved user experience
+- **Responsive design** optimized for mobile devices
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Technologies Used
+- **React.js**
+- **Material UI**
+- **React Router**
+- **Axios** for API requests
+- **Context API** for state management
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Pages
+### **Authentication**
+- `/login` → Login page for user authentication
 
-### `npm test`
+### **Stores**
+- `/stores` → List of all stores
+- `/stores/:storeId` → Store details with a list of associated customers
+- `/stores/:storeId/edit` → Edit store information
+- `/stores/new` → Create a new store
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### **Customers**
+- `/customers` → List of all customers
+- `/customers/:customerId` → Customer details
+- `/customers/:customerId/edit` → Edit customer information
+- `/customers/new` → Add a new customer
+- `/customers/searchByVat` →  Customer details by vatNumber
+- `/customers/searchByStoreId` →  Customer details by StoreId
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## API Connection
+This frontend communicates with the backend API via:
+- `http://localhost:8080/api/login` → Login (returns JWT)
+- `https:localhost:8080/api/stores` → Store management
+- `http://localhost:8080/api/customers` → Customer management
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Installation & Running
+```bash
+git clone https://github.com/gianniskorkontzilas/WebbApp-Frontend-React.git
+cd frontend-repo
+npm install
+npm start
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Authentication
+When logging in, the JWT token is stored in localStorage.
+The token is automatically included in API requests for authentication.
+Testing
+To ensure full functionality:
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Start the backend server first.
+Log in through the /login page.
+Navigate through the application to manage stores and customers.
