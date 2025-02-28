@@ -43,11 +43,55 @@
 //   );
 // };
 
+// import React, { createContext, useContext, useState, ReactNode } from "react";
+// import CustomSnackBar from "../components/CustomSnackBar.tsx";  
+
+// interface ErrorContextType {
+//   showError: (msg: string, severity: "success" | "error" | "info" | "warning") => void;
+// }
+
+// const ErrorContext = createContext<ErrorContextType | null>(null);
+
+// export const useError = (): ErrorContextType => {
+//   const context = useContext(ErrorContext);
+//   if (!context) {
+//     throw new Error("useError must be used within an ErrorProvider");
+//   }
+//   return context;
+// };
+
+// interface ErrorProviderProps {
+//   children: ReactNode;
+// }
+
+// export const ErrorProvider = ({ children }: ErrorProviderProps) => {
+//   const [error, setError] = useState<string>("");
+//   const [severity, setSeverity] = useState<"success" | "error" | "info" | "warning">("success");
+
+//   const showError = (msg: string, severity: "success" | "error" | "info" | "warning") => {
+//     setError(msg);
+//     setSeverity(severity);
+//   };
+
+//   const handleClose = () => {
+//     setError("");  
+//   };
+
+//   return (
+//     <ErrorContext.Provider value={{ showError }}>
+//       {children}
+//       <CustomSnackBar open={!!error} message={error} severity={severity} onClose={handleClose} />
+//     </ErrorContext.Provider>
+//   );
+// };
+
+
 import React, { createContext, useContext, useState, ReactNode } from "react";
 import CustomSnackBar from "../components/CustomSnackBar.tsx";  
 
 interface ErrorContextType {
   showError: (msg: string, severity: "success" | "error" | "info" | "warning") => void;
+  showSuccess: (msg: string) => void;  
 }
 
 const ErrorContext = createContext<ErrorContextType | null>(null);
@@ -65,22 +109,27 @@ interface ErrorProviderProps {
 }
 
 export const ErrorProvider = ({ children }: ErrorProviderProps) => {
-  const [error, setError] = useState<string>("");
+  const [message, setMessage] = useState<string>("");  
   const [severity, setSeverity] = useState<"success" | "error" | "info" | "warning">("success");
 
   const showError = (msg: string, severity: "success" | "error" | "info" | "warning") => {
-    setError(msg);
+    setMessage(msg);
     setSeverity(severity);
   };
 
+  const showSuccess = (msg: string) => {
+    setMessage(msg);  
+    setSeverity("success");  
+  };
+
   const handleClose = () => {
-    setError("");  
+    setMessage("");  
   };
 
   return (
-    <ErrorContext.Provider value={{ showError }}>
+    <ErrorContext.Provider value={{ showError, showSuccess }}>
       {children}
-      <CustomSnackBar open={!!error} message={error} severity={severity} onClose={handleClose} />
+      <CustomSnackBar open={!!message} message={message} severity={severity} onClose={handleClose} />
     </ErrorContext.Provider>
   );
 };

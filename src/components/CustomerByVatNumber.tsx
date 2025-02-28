@@ -173,13 +173,14 @@ interface Customer {
 
 const CustomerByVatNumber: React.FC = () => {
   const navigate = useNavigate(); 
-  const { showError } = useError(); 
   const [vatNumber, setVatNumber] = useState<string>('');
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   const [open, setOpen] = useState(false);
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
+
+  const { showError, showSuccess } = useError();  
 
   const handleSearch = async () => {
     if (!vatNumber) {
@@ -194,7 +195,7 @@ const CustomerByVatNumber: React.FC = () => {
 
       if (response.data) {
         setCustomers([response.data]);
-        showError("Customer found successfully!", "success");
+        showSuccess("Customer found successfully!");
       } else {
         setCustomers([]);
         showError("No customers found with this VAT number.", "error");
@@ -220,7 +221,7 @@ const CustomerByVatNumber: React.FC = () => {
   return (
     <div>
       <Typography variant="h4" gutterBottom>
-        Search Customers
+        Search Customers by VatNumber
       </Typography>
 
       <TextField
