@@ -1,7 +1,8 @@
 // import React, { useState, useEffect } from "react";
 // import { useNavigate, useParams } from "react-router-dom";
-// import { TextField, Button, Box, Typography, Snackbar, Alert, CircularProgress } from "@mui/material";
+// import { TextField, Button, Box, Typography, CircularProgress } from "@mui/material";
 // import axiosInstance from "../api/axiosInstance.ts";
+// import { useError } from "../context/ErrorContext.tsx";  
 
 // const CustomerForm = () => {
 //     const [firstName, setFirstName] = useState("");
@@ -9,11 +10,12 @@
 //     const [vatNumber, setVatNumber] = useState("");
 //     const [dateOfBirth, setDateOfBirth] = useState("");
 //     const [storeId, setStoreId] = useState<number | null>(null); 
-//     const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
 //     const [isLoading, setIsLoading] = useState(false); 
 
 //     const { storeId: storeIdParam, customerId } = useParams();
 //     const navigate = useNavigate();
+
+//     const { showError } = useError();  
 
 //     useEffect(() => {
 //         if (storeIdParam) {
@@ -31,24 +33,16 @@
 //                     setStoreId(response.data.storeId); 
 //                 } catch (error) {
 //                     console.error("Error fetching customer:", error);
-//                     showSnackbar("Failed to fetch customer details.", "error");
+//                     showError("Failed to fetch customer details.", "error");
 //                 }
 //             };
 //             fetchCustomer();
 //         }
-//     }, [storeIdParam, customerId]);
-
-//     const showSnackbar = (message: string, severity: "success" | "error") => {
-//         setSnackbar({ open: true, message, severity });
-//     };
-
-//     const handleCloseSnackbar = () => {
-//         setSnackbar({ ...snackbar, open: false });
-//     };
+//     }, [storeIdParam, customerId, showError]);
 
 //     const handleSubmit = async () => {
 //         if (!storeId) {
-//             showSnackbar("Store ID is required.", "error");
+//             showError("Store ID is required.", "error");
 //             return;
 //         }
 
@@ -58,15 +52,15 @@
 //         try {
 //             if (customerId) {
 //                 await axiosInstance.put(`/customers/${customerId}`, customerData);
-//                 showSnackbar("Customer updated successfully.", "success");
+//                 showError("Customer updated successfully.", "success");
 //             } else {
 //                 await axiosInstance.post(`/customers`, customerData);
-//                 showSnackbar("Customer created successfully.", "success");
+//                 showError("Customer created successfully.", "success");
 //             }
 //             navigate(`/customers`);
 //         } catch (error) {
 //             console.error("Error saving customer:", error);
-//             showSnackbar("Failed to save customer.", "error");
+//             showError("Failed to save customer.", "error");
 //         } finally {
 //             setIsLoading(false); 
 //         }
@@ -124,23 +118,11 @@
 //             >
 //                 {isLoading ? <CircularProgress size={24} /> : customerId ? "Save Changes" : "Add Customer"}
 //             </Button>
-
-//             <Snackbar
-//                 open={snackbar.open}
-//                 autoHideDuration={3000}
-//                 onClose={handleCloseSnackbar}
-//                 anchorOrigin={{ vertical: "bottom", horizontal: "center" }} 
-//             >
-//                 <Alert onClose={handleCloseSnackbar} severity={snackbar.severity as "success" | "error"} sx={{ width: "100%" }}>
-//                     {snackbar.message}
-//                 </Alert>
-//             </Snackbar>
 //         </Box>
 //     );
 // };
 
 // export default CustomerForm;
-
 
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -159,7 +141,7 @@ const CustomerForm = () => {
     const { storeId: storeIdParam, customerId } = useParams();
     const navigate = useNavigate();
 
-    const { showError } = useError();  
+    const { showError, showSuccess } = useError();  
 
     useEffect(() => {
         if (storeIdParam) {
@@ -196,12 +178,13 @@ const CustomerForm = () => {
         try {
             if (customerId) {
                 await axiosInstance.put(`/customers/${customerId}`, customerData);
-                showError("Customer updated successfully.", "success");
+                showSuccess("Customer updated successfully.");
             } else {
                 await axiosInstance.post(`/customers`, customerData);
-                showError("Customer created successfully.", "success");
+                showSuccess("Customer created successfully.");
             }
-            navigate(`/customers`);
+            
+            setTimeout(() => navigate(`/customers`), 2000); 
         } catch (error) {
             console.error("Error saving customer:", error);
             showError("Failed to save customer.", "error");
@@ -242,7 +225,7 @@ const CustomerForm = () => {
                 value={dateOfBirth}
                 onChange={(e) => setDateOfBirth(e.target.value)}
                 margin="normal"
-                InputLabelProps={{ shrink: true }}
+                slotProps={{ inputLabel: { shrink: true } }}
                 fullWidth
             />
             <TextField

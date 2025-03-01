@@ -1,6 +1,7 @@
 // import React, { useState, useEffect } from "react";
 // import { useNavigate, useParams } from "react-router-dom";
-// import { TextField, Button, Box, Typography, Snackbar, Alert, CircularProgress } from "@mui/material";
+// import { TextField, Button, Box, Typography, CircularProgress } from "@mui/material";
+// import { useError } from "../context/ErrorContext.tsx";  
 // import axiosInstance from "../api/axiosInstance.ts";
 
 // interface StoreData {
@@ -9,10 +10,11 @@
 
 // const StoreForm: React.FC = () => {
 //   const [name, setName] = useState<string>("");
-//   const [error, setError] = useState<string>("");
 //   const [isLoading, setIsLoading] = useState<boolean>(false);
 //   const { storeId } = useParams<{ storeId?: string }>();
 //   const navigate = useNavigate();
+  
+//   const { showError } = useError();  
 
 //   useEffect(() => {
 //     if (storeId) {
@@ -22,16 +24,16 @@
 //           setName(response.data.name);
 //         } catch (error) {
 //           console.error("Error fetching store:", error);
-//           setError("Σφάλμα κατά την φόρτωση των δεδομένων του καταστήματος.");
+//           showError("Error loading store data.", "error");  
 //         }
 //       };
 //       fetchStore();
 //     }
-//   }, [storeId]);
+//   }, [storeId, showError]);
 
 //   const handleSubmit = async () => {
 //     if (!name) {
-//       setError("Το όνομα του καταστήματος είναι υποχρεωτικό.");
+//       showError("Store name is required.", "error");  
 //       return;
 //     }
 
@@ -47,9 +49,9 @@
 //       navigate("/stores");
 //     } catch (err: any) {
 //       if (err.response?.status === 400) {
-//         setError("Το όνομα του store πρέπει να είναι μοναδικό.");
+//         showError("Store name must be unique.", "error");  
 //       } else {
-//         setError("Σφάλμα κατά την αποθήκευση του καταστήματος.");
+//         showError("Error saving store.", "error");  
 //       }
 //     } finally {
 //       setIsLoading(false);
@@ -71,14 +73,6 @@
 //         sx={{ mb: 2 }}
 //       />
       
-//       {error && (
-//         <Snackbar open={!!error} autoHideDuration={6000} onClose={() => setError("")}>
-//           <Alert onClose={() => setError("")} severity="error">
-//             {error}
-//           </Alert>
-//         </Snackbar>
-//       )}
-
 //       <Button
 //         variant="contained"
 //         color="primary"
@@ -93,8 +87,6 @@
 // };
 
 // export default StoreForm;
-
-
 
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -112,7 +104,7 @@ const StoreForm: React.FC = () => {
   const { storeId } = useParams<{ storeId?: string }>();
   const navigate = useNavigate();
   
-  const { showError } = useError();  
+  const { showError, showSuccess } = useError();  
 
   useEffect(() => {
     if (storeId) {
@@ -141,10 +133,13 @@ const StoreForm: React.FC = () => {
     try {
       if (storeId) {
         await axiosInstance.put(`/stores/${storeId}`, storeData);
+        showSuccess("Store updated successfully.");
       } else {
         await axiosInstance.post("/stores", storeData);
+        showSuccess("Store added successfully.");
       }
-      navigate("/stores");
+      
+      setTimeout(() => navigate("/stores"), 2000); 
     } catch (err: any) {
       if (err.response?.status === 400) {
         showError("Store name must be unique.", "error");  
